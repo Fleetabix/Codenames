@@ -1,10 +1,6 @@
 #Generic gameboard
 
-ERROR = -1
-RED = 1
-BLUE = 2
-ASSASSIN = 3
-CIV = 4
+
 
 class gameboard:
 	"""
