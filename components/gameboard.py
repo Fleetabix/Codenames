@@ -26,8 +26,6 @@ class gameboard:
 		"""
 			Takes a given word and determines if it is valid and if it exists returns which collection it belongs to
 		"""
-		if not word in self.wordgrid :
-			return ERROR
 		
 		self.wordgrid.remove(word)
 
@@ -41,6 +39,17 @@ class gameboard:
 			return ASSASSIN
 		else : 
 			return CIV
+
+
+	def validGuess(self, word):
+		"""
+			Takes a word and determines whether it still exists on the playing board
+		"""
+
+		if not word in self.wordgrid :
+			return false
+		else
+			return true
 
 
 	def currentBoard(self):
@@ -69,4 +78,6 @@ class gameboard:
 			return redWords.len()
 		else
 			return blueWords.len()
+
+
 			
