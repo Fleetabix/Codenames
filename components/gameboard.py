@@ -59,4 +59,14 @@ class gameboard:
 			return RED
 		elif not self.blueWords:
 			return BLUE 
+
+	def wordCount(self, team):
+		"""
+			Returns number of words remaining for a given team
+		"""
+
+		if team == RED :
+			return redWords.len()
+		else
+			return blueWords.len()
 			
