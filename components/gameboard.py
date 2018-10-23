@@ -37,7 +37,7 @@ class gameboard:
 			return BLUE
 		elif word in self.assassinWord :
 			return ASSASSIN
-		else : 
+		else: 
 			return CIV
 
 
@@ -48,7 +48,7 @@ class gameboard:
 
 		if not word in self.wordgrid :
 			return false
-		else
+		else:
 			return true
 
 
@@ -60,14 +60,21 @@ class gameboard:
 		return 'Red: {}\nBlue: {}\nCivilians: {}\nAssassin: {}'.format(self.redWords, self.blueWords, self.civWords, self.assassinWord)
 
 
-	def checkWinner(self):
+	def checkWinner(self, team):
 		"""
 			Determines if a winner has been found from the current state of play
 		"""
 		if not self.redWords:
 			return RED
 		elif not self.blueWords:
-			return BLUE 
+			return BLUE
+		elif not self.assassinWord:
+			if team == BLUE:
+				return RED
+			else:
+				return BLUE
+		else:
+			return 0 			
 
 	def wordCount(self, team):
 		"""
@@ -76,7 +83,7 @@ class gameboard:
 
 		if team == RED :
 			return redWords.len()
-		else
+		else:
 			return blueWords.len()
 
 
