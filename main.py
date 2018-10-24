@@ -18,6 +18,7 @@ def main():
 
 	wordgrid = createWord(wordfile)
 	newGame = gameboard(wordgrid)
+	os.system('clear')
   	
 
 	while True:
