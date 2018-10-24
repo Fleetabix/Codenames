@@ -1,5 +1,11 @@
 #Generic gameboard
+import random
 
+ERROR = -1
+RED = 1
+BLUE = 2
+ASSASSIN = 3
+CIV = 4
 
 
 class gameboard:
@@ -18,9 +24,11 @@ class gameboard:
 			Takes the shuffled wordgrid and assigns words to each category
 		"""
 		self.redWords = self.wordgrid[:7]
-		self.blueWords = self.wordgrid[8:14]
-		self.assassinWord = self.wordgrid[15]
-		self.civWords = self.wordgrid[16:]
+		self.blueWords = self.wordgrid[8:15]
+		self.assassinWord = self.wordgrid[16]
+		self.civWords = self.wordgrid[17:]
+
+		random.shuffle(self.wordgrid)
 
 	def checkWord(self, word):
 		"""
@@ -47,9 +55,9 @@ class gameboard:
 		"""
 
 		if not word in self.wordgrid :
-			return false
+			return False
 		else:
-			return true
+			return True
 
 
 	def currentBoard(self):
@@ -58,6 +66,13 @@ class gameboard:
 		"""
 		
 		return 'Red: {}\nBlue: {}\nCivilians: {}\nAssassin: {}'.format(self.redWords, self.blueWords, self.civWords, self.assassinWord)
+
+
+	def remainingWords(self):
+		"""
+			Returns the current board as a formatted string
+		"""
+		return self.wordgrid
 
 
 	def checkWinner(self, team):
@@ -82,9 +97,9 @@ class gameboard:
 		"""
 
 		if team == RED :
-			return redWords.len()
+			return len(self.redWords)
 		else:
-			return blueWords.len()
+			return len(self.blueWords)
 
 
 			

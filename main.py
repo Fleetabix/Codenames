@@ -1,6 +1,7 @@
 #Entry point to the game
 from components.gameboard import gameboard
 import random
+import os
 
 ERROR = -1
 RED = 1
@@ -17,23 +18,28 @@ def main():
 
 	wordgrid = createWord(wordfile)
 	newGame = gameboard(wordgrid)
-
-	print(newGame.currentBoard())
+  	
 
 	while True:
+
+		print('Blue team goes!')
 		takeTurn(BLUE, newGame)
-		if newGame.checkWinner(BLUE) != 0:
-			if newGame.checkWinner(BLUE) == BLUE:
-				print('Blue team wins!')
-			else:
-				print('Red team wins!')
+		checkWinner = newGame.checkWinner(BLUE)
+		if checkWinner ==  BLUE:
+			print('Blue team wins!')
 			break
+		elif checkWinner == RED:
+			print('Red team wins!')
+			break
+
+		print('Red team goes!')
 		takeTurn(RED, newGame)
-		if newGame.checkWinner(RED) != 0:
-			if newGame.checkWinner(RED) == BLUE:
-				print('Blue team wins!')
-			else:
-				print('Red team wins!')
+		checkWinner = newGame.checkWinner(RED)
+		if checkWinner ==  BLUE:
+			print('Blue team wins!')
+			break
+		elif checkWinner == RED:
+			print('Red team wins!')
 			break
  
 
@@ -53,7 +59,7 @@ def createWord(wordfile):
 			elif i == wordIndeces[j]:
 				wordgrid.append(line[:-1])
 				j += 1
-			
+		
 	return wordgrid
 
 
@@ -63,12 +69,15 @@ def takeTurn(team, currentGame):
 	"""
 		Allow a given team to take their turn
 	"""
+	
 	clue = giveClue(BLUE, currentGame)
 
+	os.system('clear')
+	print(currentGame.remainingWords())
 	print('The codeword is: {}\nThe number of words to guess is: {}'.format(clue[0], clue[1]))
 
 
-	for i in range(1, clue[1]):
+	for i in range(0, clue[1]):
 		guess = input('Please enter a word: ')
 
 		while not currentGame.validGuess(guess):
