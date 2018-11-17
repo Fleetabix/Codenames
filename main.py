@@ -2,6 +2,7 @@
 from components.gameboard import gameboard
 import random
 import os
+import sys
 
 ERROR = -1
 RED = 1
@@ -132,4 +133,10 @@ def giveClue(team, currentGame):
 	
 
 if __name__ == '__main__':
-	main()
+	if sys.argv[0] == 1:
+		main()
+	else:
+		print('Please specify type of game:')
+		print('1 - Human vs Human game')
+		print('2 - Human vs Computer game')
+		
