@@ -1,4 +1,4 @@
-from gameboard import gameboard
+from .gameboard import gameboard
 import gensim
 ERROR = -1
 RED = 1
@@ -12,7 +12,7 @@ class Human_Gen:
 	A human guesser class - doesn't store any info
 	"""
 	def __init__(self):
-		
+		pass
 		
 
 	def giveClue(self, team, currentGame):

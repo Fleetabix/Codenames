@@ -1,10 +1,12 @@
-from gameboard import gameboard
+from .gameboard import gameboard
 import gensim
 import random
 
 class Human_Guess:
 
 	def __init__(self):
+		pass
+
 
 	def guess(self, currentGame, guessword):
 		"""
@@ -25,6 +27,7 @@ class Random_Guess:
 	"""
 
 	def __init__(self):
+		pass
 
 	def guess(self, currentGame, guessword):
 		"""
