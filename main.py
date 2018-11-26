@@ -23,7 +23,7 @@ def main():
 	"""
 		Create guessers and generators
 	"""
-	#print(sys.argv[1]) 	
+	print(sys.argv[1]) 	
 	if sys.argv[1] == '1':
 		guesser1 = Human_Guess()
 		guesser2 = Human_Guess()
