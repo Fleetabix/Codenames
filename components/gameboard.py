@@ -23,10 +23,10 @@ class gameboard:
 		"""
 			Takes the shuffled wordgrid and assigns words to each category
 		"""
-		self.redWords = self.wordgrid[:7]
-		self.blueWords = self.wordgrid[8:15]
-		self.assassinWord = self.wordgrid[16]
-		self.civWords = self.wordgrid[17:]
+		self.redWords = self.wordgrid[:8]
+		self.blueWords = self.wordgrid[9:17]
+		self.assassinWord = self.wordgrid[18]
+		self.civWords = self.wordgrid[19:]
 
 		random.shuffle(self.wordgrid)
 
