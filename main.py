@@ -25,59 +25,64 @@ def main():
 	"""
 	print(sys.argv[1]) 	
 	if sys.argv[1] == '1':
-		guesser1 = Human_Guess()
-		guesser2 = Human_Guess()
-		gen1 = Human_Gen()
-		gen2 = Human_Gen()
+		players=(
+		red_guesser = Human_Guess(),
+		blue_guesser = Human_Guess(),
+		red_gen = Human_Gen(),
+		blue_gen = Human_Gen()
+		)
 	elif sys.argv[1] == '2':
-		guesser1 = Human_Guess()
-		guesser2 = Auto_Guess()
-		gen1 = Human_Gen()
-		gen2 = Automated_Gen()
+		players=(
+		red_guesser = Human_Guess(),
+		blue_guesser = Auto_Guess(),
+		red_gen = Human_Gen(),
+		blue_gen = Automated_Gen()
+		)
 	elif sys.argv[1] == '3':
-		guesser1 = Auto_Guess()
-		guesser2 = Random_Guess()
-		gen1 = Automated_Gen()
-		gen2 = Automated_Gen()
+		players=(
+		red_guesser = Auto_Guess(),
+		blue_guesser = Random_Guess(),
+		red_gen = Human_Gen(),
+		blue_gen = Automated_Gen()
+		)
+		
+
+	playGame(players)
 
 
-	playGame()
 
 
 
-
-
-def playGame():
+def playGame(players):
 	"""
 		Start a human vs human game
 	"""
 	wordfile = "components/srcWords.txt"
 
-	for x in range(1, int(sys.argv[2])):
-		#Repeat game given number of times
-		wordgrid = createWord(wordfile)
-		newGame = gameboard(wordgrid)
-		#os.system('clear')
-		while True:
-			print('Blue team goes!')
-			takeTurn(BLUE, newGame)
-			checkWinner = newGame.checkWinner(BLUE)
-			if checkWinner ==  BLUE:
-				print('Blue team wins!')
-				break
-			elif checkWinner == RED:
-				print('Red team wins!')
-				break
+	
+	wordgrid = createWord(wordfile)
+	newGame = gameboard(wordgrid)
+	#os.system('clear')
+	while True:
+		print('Blue team goes!')
+		takeTurn(BLUE, newGame)
+		checkWinner = newGame.checkWinner(BLUE)
+		if checkWinner ==  BLUE:
+			print('Blue team wins!')
+			break
+		elif checkWinner == RED:
+			print('Red team wins!')
+			break
 
-			print('Red team goes!')
-			takeTurn(RED, newGame)
-			checkWinner = newGame.checkWinner(RED)
-			if checkWinner ==  BLUE:
-				print('Blue team wins!')
-				break
-			elif checkWinner == RED:
-				print('Red team wins!')
-				break
+		print('Red team goes!')
+		takeTurn(RED, newGame)
+		checkWinner = newGame.checkWinner(RED)
+		if checkWinner ==  BLUE:
+			print('Blue team wins!')
+			break
+		elif checkWinner == RED:
+			print('Red team wins!')
+			break
 
 
 def createWord(wordfile):
