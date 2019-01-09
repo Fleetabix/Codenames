@@ -112,7 +112,9 @@ def takeTurn(team, currentGame):
 		Allow a given team to take their turn
 	"""
 	
-	clue = gen1.giveClue(team, currentGame)
+	
+	if team = RED:
+		red_gen.
 
 	os.system('clear')
 	print(currentGame.remainingWords())

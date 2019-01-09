@@ -11,11 +11,11 @@ class Human_Gen:
 	"""
 	A human guesser class - doesn't store any info
 	"""
-	def __init__(self):
-		pass
+	def __init__(self, team):
+		self.team = team
 		
 
-	def giveClue(self, team, currentGame):
+	def giveClue(self, currentGame):
 		"""
 			Returns the codeword and a number of words to guess
 		"""
