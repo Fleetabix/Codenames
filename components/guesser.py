@@ -1,8 +1,22 @@
 from .gameboard import gameboard
 import gensim
 import random
+import abc
 
-class Human_Guess:
+class guesser:
+
+	__metaclass__ = abc.ABCMeta
+
+	def __init__(self):
+		pass
+
+	@abc.abstractmethod
+	def guess(self, currentGame, guessword):
+		pass
+
+	
+
+class Human_Guess(guesser):
 
 	def __init__(self):
 		pass
@@ -12,6 +26,7 @@ class Human_Guess:
 		"""
 			Ask for a word to be guessed
 		"""
+
 		guess = input('Please enter a word: ')
 
 		while not currentGame.validGuess(guess):
