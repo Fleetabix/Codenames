@@ -1,7 +1,12 @@
 #Entry point to the game
 from components.gameboard import gameboard
+from components.generator import *
+from components.guesser import *
+
 import random
 import os
+import sys
+
 
 ERROR = -1
 RED = 1
@@ -9,22 +14,63 @@ BLUE = 2
 ASSASSIN = 3
 CIV = 4
 
+class Players:
+
+	def __init__(self, red_guesser, blue_guesser, red_gen, blue_gen):
+
+		self.red_guesser = red_guesser
+		self.blue_guesser = blue_guesser
+		self.red_gen = red_gen
+		self.blue_gen = blue_gen
+
 
 def main():
 	"""
-		Start a human vs human game
+		Create guessers and generators
+	"""
+	print(sys.argv[1]) 	
+	if sys.argv[1] == '1':
+		players = Players(
+		Human_Guess(),
+		Human_Guess(),
+		Human_Gen(RED),
+		Human_Gen(BLUE)
+		)
+	elif sys.argv[1] == '2':
+		players = Players(
+		Human_Guess(),
+		Auto_Guess(),
+		Human_Gen(RED),
+		Automated_Gen(BLUE)
+		)
+	elif sys.argv[1] == '3':
+		players= Players(
+		Auto_Guess(),
+		Random_Guess(),
+		Human_Gen(RED),
+		Automated_Gen(BLUE)
+		)
+		
+
+	playGame(players)
+
+
+
+
+
+def playGame(players):
+	"""
+		Start a game, blue team goes first
 	"""
 	wordfile = "components/srcWords.txt"
 
+	
 	wordgrid = createWord(wordfile)
 	newGame = gameboard(wordgrid)
-	os.system('clear')
-  	
-
+	#os.system('clear')
 	while True:
-
 		print('Blue team goes!')
-		takeTurn(BLUE, newGame)
+		takeTurn(BLUE, players, newGame)
 		checkWinner = newGame.checkWinner(BLUE)
 		if checkWinner ==  BLUE:
 			print('Blue team wins!')
@@ -34,7 +80,7 @@ def main():
 			break
 
 		print('Red team goes!')
-		takeTurn(RED, newGame)
+		takeTurn(RED, players, newGame)
 		checkWinner = newGame.checkWinner(RED)
 		if checkWinner ==  BLUE:
 			print('Blue team wins!')
@@ -42,7 +88,7 @@ def main():
 		elif checkWinner == RED:
 			print('Red team wins!')
 			break
- 
+
 
 def createWord(wordfile):
 	"""
@@ -66,24 +112,32 @@ def createWord(wordfile):
 
 
 
-def takeTurn(team, currentGame):
+def takeTurn(team, players, currentGame):
 	"""
 		Allow a given team to take their turn
 	"""
 	
-	clue = giveClue(BLUE, currentGame)
+	
 
 	os.system('clear')
 	print(currentGame.remainingWords())
+	
+	if team == RED:
+		clue = players.red_gen.give_clue(currentGame)
+	else:
+		clue = players.blue_gen.give_clue(currentGame)
+
 	print('The codeword is: {}\nThe number of words to guess is: {}'.format(clue[0], clue[1]))
 
-
 	for i in range(0, clue[1]):
-		guess = input('Please enter a word: ')
+		
 
-		while not currentGame.validGuess(guess):
-			print('That word doesn\'t exist on the current board')
-			guess = input('Please enter a word: ')
+
+		print(currentGame.remainingWords())
+		if team == RED:
+			guess = players.red_guesser.guess(currentGame, clue[0])
+		else:
+			guess = players.blue_guesser.guess(currentGame, clue[0])
 
 		outcome = currentGame.checkWord(guess)
 
@@ -99,26 +153,26 @@ def takeTurn(team, currentGame):
 			print('Enemy spy detected!')
 			break
 		
-def giveClue(team, currentGame):
-	"""
-		Returns the codeword and a number of words to guess
-	"""
+# def giveClue(team, currentGame):
+# 	"""
+# 		Returns the codeword and a number of words to guess
+# 	"""
 
-	print(currentGame.currentBoard())
-	codeword = input('\nPlease type your codeword: ')
+# 	print(currentGame.currentBoard())
+# 	codeword = input('\nPlease type your codeword: ')
 	
-	while True :
-		try:
-			guessnum = int(input('Please type the number of words to guess: '))
-		except Exception as e:
-			print('Must be a number')	
+# 	while True :
+# 		try:
+# 			guessnum = int(input('Please type the number of words to guess: '))
+# 		except Exception as e:
+# 			print('Must be a number')	
 		
-		if guessnum > 0 and guessnum <= currentGame.wordCount(team):
-			break
-		else:
-			print("Number can only be less than remaining words")
+# 		if guessnum > 0 and guessnum <= currentGame.wordCount(team):
+# 			break
+# 		else:
+# 			print("Number can only be less than remaining words")
 
-	return (codeword, guessnum)
+# 	return (codeword, guessnum)
 
 # def switchTeam(team):
 # 	"""
@@ -132,4 +186,23 @@ def giveClue(team, currentGame):
 	
 
 if __name__ == '__main__':
-	main()
+
+	if len(sys.argv) < 2 :
+		print('Please specify type of game:')
+		print('1 - Human vs Human game')
+		print('2 - Human vs Computer game')
+		print('3 - Computer vs Computer game')
+
+
+	if (sys.argv[1] == '1'):
+		main()
+	elif (sys.argv[1] == '2'):
+		main()
+	elif (sys.argv[1] == '3'):
+		main()
+	else:
+		print('Please specify type of game:')
+		print('1 - Human vs Human game')
+		print('2 - Human vs Computer game')
+		print('3 - Computer vs Computer game')
+
