@@ -1,5 +1,6 @@
 #Generic gameboard
 import random
+from terminaltables import AsciiTable
 
 ERROR = -1
 RED = 1
@@ -46,6 +47,7 @@ class gameboard:
 		elif word in self.assassinWord :
 			return ASSASSIN
 		else: 
+			self.civWords.remove(word)
 			return CIV
 
 
@@ -72,7 +74,17 @@ class gameboard:
 		"""
 			Returns the current board as a formatted string
 		"""
-		return self.wordgrid
+		data = []
+		for i in range(0, len(self.wordgrid), 5):
+			data.append(self.wordgrid[i:i + 5])
+
+
+		table = AsciiTable(data)
+		table.inner_heading_row_border = False
+
+		return table.table
+
+
 
 
 	def checkWinner(self, team):
