@@ -1,8 +1,12 @@
 from .gameboard import gameboard
 import gensim
+import abc
 
 class Gen:
 	"""A general guesser class"""
+
+	__metaclass__ = abc.ABCMeta
+
 	ERROR = -1
 	RED = 1
 	BLUE = 2
@@ -14,10 +18,11 @@ class Gen:
 	def __init__(self, team):
 		self.team = team
 
-	def valid_guess(self, words, guess):
+	@staticmethod
+	def valid_guess(words, guess):
 		return True
 
-	@abstractmethod
+	@abc.abstractmethod
 	def give_clue(self, currentGame):
 		pass
 
@@ -41,7 +46,7 @@ class Human_Gen(Gen):
 
 			codeword = input('\nPlease type your codeword: ')
 
-			if self.valid_guess(codeword) :
+			if self.valid_guess(currentGame.wordgrid, codeword) :
 				break
 			else :
 				print("Not a valid codeword!")
@@ -50,13 +55,14 @@ class Human_Gen(Gen):
 		while True :
 			try:
 				guessnum = int(input('Please type the number of words to guess: '))
+
+				if guessnum > 0 and guessnum <= currentGame.wordCount(self.team):
+					break
+				else:
+					print("Number can only be less than remaining words")
 			except Exception as e:
 				print('Must be a number')	
-			
-			if guessnum > 0 and guessnum <= currentGame.wordCount(team):
-				break
-			else:
-				print("Number can only be less than remaining words")
+							
 
 		return (codeword, guessnum)
 
@@ -87,16 +93,21 @@ class Automated_Gen(Gen):
 			)
 
 		for word in results:
-			if self.valid_guess(word[0]):
+			if self.valid_guess(currentGame.wordgrid, word[0]):
 				return (word[0], 3)
 
 
 class Chaos_Gen(Gen):
-	"""docstring for Chaos_Gen"""
+	"""
+	Just returns blank clues with maximum word count - maximum unhelpfulness
+	"""
 	def __init__(self, team):
 		super().__init__(team)
 		
 	def give_clue(self, currentGame):
+		"""
+		Gives an empty clue, but highest possible number of words
+		"""
 		return ("", currentGame.wordCount(team))
 
 		
