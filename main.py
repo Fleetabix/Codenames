@@ -60,20 +60,27 @@ def main():
 	red_wins = 0
 	blue_wins = 0
 
+	if random.random() > 0.5 :
+		start_team = BLUE
+	else :
+		start_team = RED
+
 	for x in range(0, rounds):
-				
-		if playGame(players) == RED :
+		
+		if playGame(players, start_team) == RED :
 			red_wins += 1
 		else:
 			blue_wins += 1
+
+		start_team = switchTeam(start_team)
 
 	print('Rounds played: {}\nRed wins: {}\nBlue wins: {}'.format(rounds, red_wins, blue_wins))
 
 
 
-def playGame(players):
+def playGame(players, active_team):
 	"""
-		Start a game, blue team goes first
+		Start a game, given team goes first
 	"""
 	wordfile = "components/srcWords.txt"
 
@@ -82,25 +89,31 @@ def playGame(players):
 	newGame = gameboard(wordgrid)
 	#os.system('clear')
 	while True:
-		print('Blue team goes!')
-		takeTurn(BLUE, players, newGame)
-		checkWinner = newGame.checkWinner(BLUE)
-		if checkWinner ==  BLUE:
-			print('Blue team wins!')
-			return BLUE
-		elif checkWinner == RED:
-			print('Red team wins!')
-			return RED
+		if active_team == RED:
+			
+			print('Blue team goes!')
+			takeTurn(BLUE, players, newGame)
+			checkWinner = newGame.checkWinner(BLUE)
+			if checkWinner ==  BLUE:
+				print('Blue team wins!')
+				return BLUE
+			elif checkWinner == RED:
+				print('Red team wins!')
+				return RED
 
-		print('Red team goes!')
-		takeTurn(RED, players, newGame)
-		checkWinner = newGame.checkWinner(RED)
-		if checkWinner ==  BLUE:
-			print('Blue team wins!')
-			return BLUE
-		elif checkWinner == RED:
-			print('Red team wins!')
-			return RED
+		else:
+
+			print('Red team goes!')
+			takeTurn(RED, players, newGame)
+			checkWinner = newGame.checkWinner(RED)
+			if checkWinner ==  BLUE:
+				print('Blue team wins!')
+				return BLUE
+			elif checkWinner == RED:
+				print('Red team wins!')
+				return RED
+
+		active_team = switchTeam(active_team)
 
 
 def createWord(wordfile):
@@ -132,13 +145,15 @@ def takeTurn(team, players, currentGame):
 	
 	
 
-	os.system('clear')
+	
 	print(currentGame.remainingWords())
 	
 	if team == RED:
 		clue = players.red_gen.give_clue(currentGame)
 	else:
 		clue = players.blue_gen.give_clue(currentGame)
+
+	os.system('clear')
 
 	print('The codeword is: {}\nThe number of words to guess is: {}'.format(clue[0], clue[1]))
 
@@ -166,36 +181,17 @@ def takeTurn(team, players, currentGame):
 			print('Enemy spy detected!')
 			break
 		
-# def giveClue(team, currentGame):
-# 	"""
-# 		Returns the codeword and a number of words to guess
-# 	"""
 
-# 	print(currentGame.currentBoard())
-# 	codeword = input('\nPlease type your codeword: ')
-	
-# 	while True :
-# 		try:
-# 			guessnum = int(input('Please type the number of words to guess: '))
-# 		except Exception as e:
-# 			print('Must be a number')	
-		
-# 		if guessnum > 0 and guessnum <= currentGame.wordCount(team):
-# 			break
-# 		else:
-# 			print("Number can only be less than remaining words")
 
-# 	return (codeword, guessnum)
+def switchTeam(team):
+	"""
+		Returns the opposite team
+	"""
 
-# def switchTeam(team):
-# 	"""
-# 		Returns the opposite team
-# 	"""
-
-# 	if team == BLUE:
-# 		return RED
-# 	else
-# 		return BLUE
+	if team == BLUE:
+		return RED
+	else :
+		return BLUE
 	
 
 if __name__ == '__main__':
