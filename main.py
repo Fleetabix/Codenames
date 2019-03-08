@@ -51,10 +51,23 @@ def main():
 		Automated_Gen(BLUE)
 		)
 		
+	rounds = 1
+	try: 
+		rounds = int(sys.argv[2])
+	except Exception as e:
+		pass
 
-	playGame(players)
+	red_wins = 0
+	blue_wins = 0
 
+	for x in range(0, rounds):
+				
+		if playGame(players) == RED :
+			red_wins += 1
+		else:
+			blue_wins += 1
 
+	print('Rounds played: {}\nRed wins: {}\nBlue wins: {}'.format(rounds, red_wins, blue_wins))
 
 
 
@@ -74,20 +87,20 @@ def playGame(players):
 		checkWinner = newGame.checkWinner(BLUE)
 		if checkWinner ==  BLUE:
 			print('Blue team wins!')
-			break
+			return BLUE
 		elif checkWinner == RED:
 			print('Red team wins!')
-			break
+			return RED
 
 		print('Red team goes!')
 		takeTurn(RED, players, newGame)
 		checkWinner = newGame.checkWinner(RED)
 		if checkWinner ==  BLUE:
 			print('Blue team wins!')
-			break
+			return BLUE
 		elif checkWinner == RED:
 			print('Red team wins!')
-			break
+			return RED
 
 
 def createWord(wordfile):
