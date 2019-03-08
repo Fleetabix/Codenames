@@ -95,7 +95,7 @@ class gameboard:
 			return RED
 		elif not self.blueWords:
 			return BLUE
-		elif not self.assassinWord:
+		elif self.assassinWord not in self.wordgrid:
 			if team == BLUE:
 				return RED
 			else:
