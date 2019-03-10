@@ -50,6 +50,13 @@ def main():
 		Human_Gen(RED),
 		Automated_Gen(BLUE)
 		)
+	elif sys.argv[1] == '4':
+		players = Players(
+			Auto_Guess(),
+			Random_Guess(),
+			Automated_Gen(RED),
+			Chaos_Gen(BLUE)
+			)
 		
 	rounds = 1
 	try: 
@@ -82,7 +89,7 @@ def playGame(players, active_team):
 	"""
 		Start a game, given team goes first
 	"""
-	wordfile = "components/srcWords.txt"
+	wordfile = "components/easyWords.txt"
 
 	
 	wordgrid = createWord(wordfile)
@@ -120,7 +127,7 @@ def createWord(wordfile):
 	"""
 		Draw 25 random words to use in the game
 	"""
-	wordIndeces = random.sample(range(1, 400), 25)
+	wordIndeces = random.sample(range(1, 365), 25)
 	wordIndeces.sort()
 	wordgrid = []
 
@@ -208,6 +215,8 @@ if __name__ == '__main__':
 	elif (sys.argv[1] == '2'):
 		main()
 	elif (sys.argv[1] == '3'):
+		main()
+	elif (sys.argv[1] == '4'):
 		main()
 	else:
 		print('Please specify type of game:')
