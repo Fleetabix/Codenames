@@ -2,13 +2,11 @@ day
 mammoth
 head
 stream
-centaur
 wave
 engine
 microscope
 suit
 mug
-scorpion
 jack
 kangaroo
 fence
@@ -33,7 +31,6 @@ ruler
 lab
 boom
 force
-phoenix
 van
 press
 hawk
@@ -60,7 +57,6 @@ watch
 cell
 knife
 organ
-horseshoe
 mouse
 plate
 contract
@@ -89,7 +85,6 @@ card
 hood
 duck
 band
-robin
 pool
 star
 bridge
@@ -110,7 +105,6 @@ tube
 grace
 iron
 doctor
-roulette
 degree
 wake
 needle
@@ -165,7 +159,6 @@ alien
 whip
 pumpkin
 trip
-snowman
 forest
 capital
 strike
@@ -228,9 +221,7 @@ water
 paper
 slug
 button
-ninja
 ground
-bugle
 mouth
 tag
 nut
@@ -247,7 +238,6 @@ pistol
 scientist
 kiwi
 log
-germany
 hand
 disease
 bed
@@ -274,8 +264,6 @@ night
 string
 poison
 pyramid
-undertaker
-aztec
 orange
 smuggler
 pupil
@@ -292,7 +280,6 @@ torch
 flute
 carrot
 time
-unicorn
 circle
 port
 swing
@@ -308,7 +295,6 @@ crash
 angel
 satellite
 root
-alps
 sock
 ice
 tap
@@ -324,7 +310,6 @@ center
 server
 shoe
 club
-platypus
 box
 piano
 parachute
@@ -342,7 +327,6 @@ square
 mass
 figure
 space
-amazon
 lap
 washer
 shot
@@ -363,4 +347,3 @@ superhero
 pole
 pan
 king
-

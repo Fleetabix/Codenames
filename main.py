@@ -127,7 +127,7 @@ def createWord(wordfile):
 	"""
 		Draw 25 random words to use in the game
 	"""
-	wordIndeces = random.sample(range(1, 365), 25)
+	wordIndeces = random.sample(range(1, 350), 25)
 	wordIndeces.sort()
 	wordgrid = []
 
@@ -174,7 +174,9 @@ def takeTurn(team, players, currentGame):
 		else:
 			guess = players.blue_guesser.guess(currentGame, clue[0])
 
-		outcome = currentGame.checkWord(guess)
+		print('Guess was:{}'.format(guess))
+		outcome = currentGame.checkWord(guess.lower())
+
 
 		if outcome == team:
 			print("Correct guess")
