@@ -25,8 +25,16 @@ class Gen:
 	def valid_clue(words, clue):
 		if re.search("^DBPEDIA", clue) :
 			return False
-		else:
-			return True
+
+		
+		
+		for wrd in words:
+			if re.search("^" + wrd, clue.lower()):
+				return False
+			if re.search("^" + clue.lower(), wrd):
+				return False
+	
+		return True
 
 	@abc.abstractmethod
 	def give_clue(self, currentGame):
@@ -147,6 +155,6 @@ class Wiki_Gen(Gen):
 			)
 
 		for word in results:
-			if self.valid_clue(currentGame.wordgrid, word[0]):
-				return (word[0], 3)
+			if self.valid_clue(currentGame.wordgrid, word[0].rstrip(')')):
+				return (word[0].rstrip(')'), 3)
 
