@@ -36,7 +36,7 @@ class Human_Guess(guesser):
 		return guess
 
 
-class Random_Guess:
+class Random_Guess(guesser):
 	"""
 		A guesser that just randomly guesses words
 	"""
@@ -52,14 +52,43 @@ class Random_Guess:
 
 
 
-class Auto_Guess:
+class News_Guess(guesser):
 	"""
 		A guesser that uses a model to choose the best guess on the board
 	"""
 
 	def __init__(self):
 
-		self.model = gensim.models.KeyedVectors.load_word2vec_format('components/models/GoogleNews-vectors-negative300.bin', binary=True, limit=100000)
+		self.model = gensim.models.KeyedVectors.load_word2vec_format(
+			'components/models/GoogleNews-vectors-negative300.bin', 
+			binary=True, 
+			limit=100000)
+
+
+	def guess(self, currentGame, guessword):
+		"""
+			Choose highest match on remaining board
+		"""
+		matches = []
+
+		for word in currentGame.wordgrid:
+			matches.append((word, self.model.distance(guessword, word)))
+
+		matches.sort(key=lambda x:x[1])
+
+		return matches[0][0]
+
+class Wiki_Guess(guesser):
+	"""
+		A guesser that uses a model to choose the best guess on the board
+	"""
+
+	def __init__(self):
+
+		self.model = gensim.models.KeyedVectors.load_word2vec_format(
+			'components/models/wiki_model.bin', 
+			binary=True, 
+			limit=100000)
 
 
 	def guess(self, currentGame, guessword):
