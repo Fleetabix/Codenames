@@ -59,7 +59,7 @@ class Auto_Guess:
 
 	def __init__(self):
 
-		self.model = gensim.models.KeyedVectors.load_word2vec_format('models/GoogleNews-vectors-negative300.bin', binary=True, limit=50000)
+		self.model = gensim.models.KeyedVectors.load_word2vec_format('components/models/GoogleNews-vectors-negative300.bin', binary=True, limit=100000)
 
 
 	def guess(self, currentGame, guessword):
