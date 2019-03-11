@@ -157,7 +157,6 @@ fan
 dwarf
 alien
 whip
-pumpkin
 trip
 forest
 capital
@@ -236,7 +235,6 @@ missile
 embassy
 pistol
 scientist
-kiwi
 log
 hand
 disease
@@ -328,7 +326,6 @@ mass
 figure
 space
 lap
-washer
 shot
 bill
 staff
