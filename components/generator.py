@@ -29,15 +29,12 @@ class Gen:
 		
 		
 		for wrd in words:
-			if re.search("^" + wrd, clue.lower()):
+			if re.search(".*" + wrd, clue.lower()):
 				return False
-				try:
-					if re.search("^" + clue.lower(), wrd):
-						return False
+		
+			if re.search(".*" + clue.lower(), wrd):
+				return False
 					
-				except Exception as e:
-					print(clue)
-					raise e
 	
 		return True
 
@@ -179,6 +176,7 @@ class Strategic_Gen(Gen):
 			binary=True, 
 			limit=100000
 			)
+		self.old_clues = []
 
 	def give_clue(self, currentGame):
 		"""
@@ -188,16 +186,26 @@ class Strategic_Gen(Gen):
 		remaining_words = currentGame.wordCount(self.team)
 
 		if (self.team == RED):
-
+			results = []
 			if remaining_words < 5:
 				results = self.model.most_similar(
 					positive = currentGame.redWords,
 					negative = [currentGame.assassinWord]
 				)
 			else: 
-				for i in range(0, remaining_words - 4):
-					pass
-
+				for i in range(0, remaining_words - 3):
+					for j in range(i+1, remaining_words - 2):
+						for k in range(j+1, remaining_words-1):
+							for l in range(k+1, remaining_words):
+								results += self.model.most_similar(
+									positive = [
+									currentGame.redWords[i],
+									currentGame.redWords[j],
+									currentGame.redWords[k],
+									currentGame.redWords[l]
+									],
+									negative = [currentGame.assassinWord]
+									)
 
 
 
@@ -209,10 +217,14 @@ class Strategic_Gen(Gen):
 				positive = currentGame.blueWords,
 				negative = [currentGame.assassinWord]
 			)
-
+	
+		results.sort(key=lambda x:x[1], reverse=True)
 		for word in results:
-			if self.valid_clue(currentGame.wordgrid, word[0]):
+			if word[0] not in self.old_clues and self.valid_clue(currentGame.wordgrid, word[0]):
 				guessnum = 4
 				if remaining_words < 4:
 					guessnum = remaining_words
+
+				self.old_clues += word[0]	
 				return (word[0], guessnum)
+	
