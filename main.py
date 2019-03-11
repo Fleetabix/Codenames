@@ -39,23 +39,30 @@ def main():
 	elif sys.argv[1] == '2':
 		players = Players(
 		Human_Guess(),
-		Auto_Guess(),
+		Human_Guess(),
 		Human_Gen(RED),
 		Automated_Gen(BLUE)
 		)
 	elif sys.argv[1] == '3':
 		players= Players(
-		Auto_Guess(),
+		News_Guess(),
 		Random_Guess(),
 		Human_Gen(RED),
 		Automated_Gen(BLUE)
 		)
 	elif sys.argv[1] == '4':
 		players = Players(
-			Auto_Guess(),
+			News_Guess(),
 			Random_Guess(),
 			Automated_Gen(RED),
 			Chaos_Gen(BLUE)
+			)
+	elif sys.argv[1] == '5':
+		players = Players(
+			News_Guess(),
+			Wiki_Guess(),
+			Automated_Gen(RED),
+			Wiki_Gen(BLUE)
 			)
 		
 	rounds = 1
@@ -127,7 +134,7 @@ def createWord(wordfile):
 	"""
 		Draw 25 random words to use in the game
 	"""
-	wordIndeces = random.sample(range(1, 350), 25)
+	wordIndeces = random.sample(range(1, 346), 25)
 	wordIndeces.sort()
 	wordgrid = []
 
@@ -210,19 +217,9 @@ if __name__ == '__main__':
 		print('1 - Human vs Human game')
 		print('2 - Human vs Computer game')
 		print('3 - Computer vs Computer game')
+		print('4 - ')
+	else :
+		main()
 
 
-	if (sys.argv[1] == '1'):
-		main()
-	elif (sys.argv[1] == '2'):
-		main()
-	elif (sys.argv[1] == '3'):
-		main()
-	elif (sys.argv[1] == '4'):
-		main()
-	else:
-		print('Please specify type of game:')
-		print('1 - Human vs Human game')
-		print('2 - Human vs Computer game')
-		print('3 - Computer vs Computer game')
 
