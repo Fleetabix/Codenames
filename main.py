@@ -45,10 +45,10 @@ def main():
 		)
 	elif sys.argv[1] == '3':
 		players= Players(
-		News_Guess(),
-		Random_Guess(),
-		Human_Gen(RED),
-		Automated_Gen(BLUE)
+		Human_Guess(),
+		Human_Guess(),
+		Strategic_Gen(RED),
+		Human_Gen(BLUE)
 		)
 	elif sys.argv[1] == '4':
 		players = Players(
