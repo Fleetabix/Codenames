@@ -134,6 +134,8 @@ class Automated_Gen(Gen):
 				if currentGame.wordCount(self.team) < 3:
 					guessnum = currentGame.wordCount(self.team)
 				return (word[0], guessnum)
+
+		return('pass', 1)
 	
 class Wiki_Gen(Gen):
 
@@ -208,10 +210,6 @@ class Strategic_Gen(Gen):
 									)
 
 
-
-
-
-
 		else:
 			results = self.model.most_similar(
 				positive = currentGame.blueWords,
@@ -228,3 +226,69 @@ class Strategic_Gen(Gen):
 				self.old_clues += word[0]	
 				return (word[0], guessnum)
 	
+
+
+
+
+class Strategic_Gen_v2(Gen):
+
+	def __init__(self, team):
+
+		super().__init__(team)
+		self.model = gensim.models.KeyedVectors.load_word2vec_format(
+			'components/models/GoogleNews-vectors-negative300.bin', 
+			binary=True, 
+			limit=100000
+			)
+		self.old_clues = []
+
+	def give_clue(self, currentGame):
+		"""
+			Trys to find the most similar codeword across 2-5 words
+		"""
+
+		remaining_words = currentGame.wordCount(self.team)
+
+		if (self.team == BLUE):
+			results = []
+			if remaining_words < 4:
+				results = self.model.most_similar(
+					positive = currentGame.blueWords,
+					negative = [currentGame.assassinWord]
+				)
+				results = list(map(lambda x: (x, remaining_words), results))
+			else: 
+				for i in range(0, remaining_words - 2):
+					for j in range(i+1, remaining_words - 1):
+						for k in range(j+1, remaining_words):
+						
+							results += self.model.most_similar(
+								positive = [
+								currentGame.blueWords[i],
+								currentGame.blueWords[j],
+								currentGame.blueWords[k]
+								],
+								negative = [currentGame.assassinWord]
+								)
+
+				results = list(map(lambda x: (x, 3), results))
+
+
+		else:
+			results = self.model.most_similar(
+				positive = currentGame.redWords,
+				negative = [currentGame.assassinWord]
+			)
+			results = list(map(lambda x: (x, 3), results))
+
+		results.sort(key=lambda x:x[1], reverse=True)
+		#print(currentGame.blueWords)
+		#print(results)
+		for word in results:
+			if word[0][0] not in self.old_clues and self.valid_clue(currentGame.wordgrid, word[0][0]):
+				self.old_clues += word[0]
+				return (word[0][0], word[1])
+
+
+
+		return('pass', 1)
