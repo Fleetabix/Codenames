@@ -64,12 +64,18 @@ def main():
 			Automated_Gen(RED),
 			Wiki_Gen(BLUE)
 			)
-		
-	rounds = 1
+	elif sys.argv[1] == '6':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Automated_Gen(RED),
+			Strategic_Gen_v2(BLUE)
+			)
+	
 	try: 
 		rounds = int(sys.argv[2])
 	except Exception as e:
-		pass
+		rounds = 1
 
 	red_wins = 0
 	blue_wins = 0
@@ -166,6 +172,9 @@ def takeTurn(team, players, currentGame):
 		clue = players.red_gen.give_clue(currentGame)
 	else:
 		clue = players.blue_gen.give_clue(currentGame)
+
+	if clue == None:
+		return
 
 	os.system('clear')
 
