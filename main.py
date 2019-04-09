@@ -71,7 +71,13 @@ def main():
 			Automated_Gen(RED),
 			Strategic_Gen_v2(BLUE)
 			)
-	
+	elif sys.argv[1] == '7':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Automated_Gen(RED),
+			Strategic_Gen_v3(BLUE)
+			)
 	try: 
 		rounds = int(sys.argv[2])
 	except Exception as e:
