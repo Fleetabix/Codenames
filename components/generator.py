@@ -275,11 +275,28 @@ class Strategic_Gen_v2(Gen):
 
 
 		else:
-			results = self.model.most_similar(
-				positive = currentGame.redWords,
-				negative = [currentGame.assassinWord]
-			)
-			results = list(map(lambda x: (x, 3), results))
+			results = []
+			if remaining_words < 4:
+				results = self.model.most_similar(
+					positive = currentGame.redWords,
+					negative = [currentGame.assassinWord]
+				)
+				results = list(map(lambda x: (x, remaining_words), results))
+			else: 
+				for i in range(0, remaining_words - 2):
+					for j in range(i+1, remaining_words - 1):
+						for k in range(j+1, remaining_words):
+						
+							results += self.model.most_similar(
+								positive = [
+								currentGame.redWords[i],
+								currentGame.redWords[j],
+								currentGame.redWords[k]
+								],
+								negative = [currentGame.assassinWord]
+								)
+
+				results = list(map(lambda x: (x, 3), results))
 
 		results.sort(key=lambda x:x[1], reverse=True)
 		#print(currentGame.blueWords)
@@ -292,3 +309,5 @@ class Strategic_Gen_v2(Gen):
 
 
 		return('pass', 1)
+
+
