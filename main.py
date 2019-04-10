@@ -31,24 +31,24 @@ def main():
 	print(sys.argv[1]) 	
 	if sys.argv[1] == '1':
 		players = Players(
-		Human_Guess(),
-		Human_Guess(),
-		Human_Gen(RED),
-		Human_Gen(BLUE)
+			Human_Guess(),
+			Human_Guess(),
+			Human_Gen(RED),
+			Human_Gen(BLUE)
 		)
 	elif sys.argv[1] == '2':
 		players = Players(
-		Human_Guess(),
-		Human_Guess(),
-		Human_Gen(RED),
-		Automated_Gen(BLUE)
+			Human_Guess(),
+			Human_Guess(),
+			Human_Gen(RED),
+			Automated_Gen(BLUE)
 		)
 	elif sys.argv[1] == '3':
 		players= Players(
-		Human_Guess(),
-		Human_Guess(),
-		Strategic_Gen(RED),
-		Human_Gen(BLUE)
+			Human_Guess(),
+			Human_Guess(),
+			Strategic_Gen(RED),
+			Human_Gen(BLUE)
 		)
 	elif sys.argv[1] == '4':
 		players = Players(
@@ -77,6 +77,20 @@ def main():
 			News_Guess(),
 			Automated_Gen(RED),
 			Strategic_Gen_v3(BLUE)
+			)
+	elif sys.argv[1] == '8':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Automated_Gen(RED),
+			Automated_Gen_v2(BLUE)
+			)
+	elif sys.argv[1] == '9':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Automated_Gen(RED),
+			Strategic_Gen_v4(BLUE)
 			)
 	try: 
 		rounds = int(sys.argv[2])
