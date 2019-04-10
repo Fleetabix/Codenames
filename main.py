@@ -2,6 +2,7 @@
 from components.gameboard import gameboard
 from components.generator import *
 from components.guesser import *
+from components.statistics import game_stats
 
 import random
 import os
@@ -13,6 +14,9 @@ RED = 1
 BLUE = 2
 ASSASSIN = 3
 CIV = 4
+
+stat_collector = game_stats()
+
 
 class Players:
 
@@ -107,14 +111,11 @@ def main():
 
 	for x in range(0, rounds):
 		
-		if playGame(players, start_team) == RED :
-			red_wins += 1
-		else:
-			blue_wins += 1
-
+		playGame(players, start_team) == RED
+			
 		start_team = switchTeam(start_team)
 
-	print('Rounds played: {}\nRed wins: {}\nBlue wins: {}'.format(rounds, red_wins, blue_wins))
+	print(stat_collector.summary_stats())
 
 
 
@@ -128,16 +129,24 @@ def playGame(players, active_team):
 	wordgrid = createWord(wordfile)
 	newGame = gameboard(wordgrid)
 	#os.system('clear')
+
+	stat_collector.new_game(active_team)
+
 	while True:
+
+		stat_collector.new_round()
+
 		if active_team == RED:
 			
 			print('Blue team goes!')
 			takeTurn(BLUE, players, newGame)
 			checkWinner = newGame.checkWinner(BLUE)
 			if checkWinner ==  BLUE:
+				stat_collector.end_game(BLUE, True)
 				print('Blue team wins!')
 				return BLUE
 			elif checkWinner == RED:
+				stat_collector.end_game(RED, False)
 				print('Red team wins!')
 				return RED
 
@@ -147,9 +156,11 @@ def playGame(players, active_team):
 			takeTurn(RED, players, newGame)
 			checkWinner = newGame.checkWinner(RED)
 			if checkWinner ==  BLUE:
+				stat_collector.end_game(BLUE, False)
 				print('Blue team wins!')
 				return BLUE
 			elif checkWinner == RED:
+				stat_collector.end_game(RED, True)
 				print('Red team wins!')
 				return RED
 
@@ -217,6 +228,7 @@ def takeTurn(team, players, currentGame):
 		if outcome == team:
 			print("Correct guess")
 		elif outcome == ASSASSIN:
+			stat_collector.assassin_detected()
 			print("Assasin found!")
 			break
 		elif outcome == CIV:
