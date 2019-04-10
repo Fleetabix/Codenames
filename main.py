@@ -117,6 +117,7 @@ def main():
 
 	print(stat_collector.summary_stats())
 
+	stat_collector.export_stats()
 
 
 def playGame(players, active_team):

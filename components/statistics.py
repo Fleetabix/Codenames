@@ -1,3 +1,6 @@
+import csv
+import datetime
+
 ERROR = -1
 RED = 1
 BLUE = 2
@@ -13,6 +16,7 @@ class game_stats():
 		self.blue_wins = 0
 		self.round_counter = 0
 		self.game_summary = []
+		self.games_played = 0
 
 	def new_round(self):
 
@@ -22,8 +26,10 @@ class game_stats():
 	def new_game(self, start_team):
 
 		self.round_counter = 0
-		
+		self.games_played += 1
+
 		self.game_summary.append({
+			'number' : self.games_played,
 			'start_team' : start_team,
 			'is_assassin' : False
 		})
@@ -47,10 +53,31 @@ class game_stats():
 
 	def summary_stats(self):
 		return "Rounds played: {}\nBlue wins: {}\nRed wins: {}".format(
-			len(self.game_summary),
+			self.games_played,
 			self.blue_wins,
 			self.red_wins
 		)
 
 	def export_stats(self):
-		pass
+		cols = [
+			'number', 
+			'start_team', 
+			'rounds',
+			'winner',
+			'is_assassin' ,
+			'true_win'
+			]
+		now = datetime.datetime.now()
+		fn = "results/stats" + str(now.replace(microsecond=0)) + ".csv"
+		with open(fn, 'w') as csvfile:
+			writer = csv.DictWriter(csvfile, fieldnames=cols)
+			writer.writerow({
+				'number': 'No',
+				'start_team': 'Start_team',
+				'rounds': 'Rounds',
+				'winner': 'Winning_team',
+				'is_assassin': 'Assassin_win',
+				'true_win': 'True_win'
+				})
+			for games in self.game_summary:
+				writer.writerow(games)
