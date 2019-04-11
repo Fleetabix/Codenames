@@ -58,7 +58,7 @@ def main():
 		players = Players(
 			News_Guess(),
 			Random_Guess(),
-			Automated_Gen(RED),
+			Strategic_Gen_v4(RED),
 			Chaos_Gen(BLUE)
 			)
 	elif sys.argv[1] == '5':
@@ -96,13 +96,32 @@ def main():
 			Automated_Gen(RED),
 			Strategic_Gen_v4(BLUE)
 			)
+	elif sys.argv[1] == '10':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Automated_Gen_v2(RED),
+			Strategic_Gen_v4(BLUE)
+			)
+	elif sys.argv[1] == '11':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Strategic_Gen_v4(RED),
+			Strategic_Gen_v5(BLUE)
+			)
+	elif sys.argv[1] == '12':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Strategic_Gen_v4(RED),
+			Strategic_Gen_v6(BLUE)
+			)
 	try: 
 		rounds = int(sys.argv[2])
 	except Exception as e:
 		rounds = 1
 
-	red_wins = 0
-	blue_wins = 0
 
 	if random.random() > 0.5 :
 		start_team = BLUE
@@ -111,7 +130,7 @@ def main():
 
 	for x in range(0, rounds):
 		
-		playGame(players, start_team) == RED
+		playGame(players, start_team)
 			
 		start_team = switchTeam(start_team)
 
@@ -136,8 +155,9 @@ def playGame(players, active_team):
 	while True:
 
 		stat_collector.new_round()
-
-		if active_team == RED:
+		
+		#This was wrong way round 11/4
+		if active_team == BLUE:
 			
 			print('Blue team goes!')
 			takeTurn(BLUE, players, newGame)
@@ -194,9 +214,6 @@ def takeTurn(team, players, currentGame):
 	"""
 		Allow a given team to take their turn
 	"""
-	
-	
-
 	
 	print(currentGame.remainingWords())
 	
