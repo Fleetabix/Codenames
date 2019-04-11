@@ -300,7 +300,7 @@ class Strategic_Gen_v2(Gen):
 
 				results = list(map(lambda x: (x, 3), results))
 
-		results.sort(key=lambda x:x[1], reverse=True)
+		results.sort(key=lambda x:x[0][1], reverse=True)
 		#print(currentGame.blueWords)
 		#print(results)
 		for word in results:
@@ -376,7 +376,7 @@ class Strategic_Gen_v3(Gen):
 
 				results = list(map(lambda x: (x, 2), results))
 
-		results.sort(key=lambda x:x[1], reverse=True)
+		results.sort(key=lambda x:x[0][1], reverse=True)
 		#print(currentGame.blueWords)
 		#print(results)
 		for word in results:
@@ -494,9 +494,195 @@ class Strategic_Gen_v4(Gen):
 
 				results = list(map(lambda x: (x, 3), results))
 
+		results.sort(key=lambda x:x[0][1], reverse=True)
+		# print(currentGame.redWords)
+		# print(results)
+		for word in results:
+			if word[0][0] not in self.old_clues and self.valid_clue(currentGame.wordgrid, word[0][0]):
+				self.old_clues += word[0]
+				return (word[0][0], word[1])
+
+
+
+		return('pass', 1)
+
+class Strategic_Gen_v5(Gen):
+
+	def __init__(self, team):
+
+		super().__init__(team)
+		self.model = gensim.models.KeyedVectors.load_word2vec_format(
+			'components/models/GoogleNews-vectors-negative300.bin', 
+			binary=True, 
+			limit=100000
+			)
+		self.old_clues = []
+
+	def give_clue(self, currentGame):
+		"""
+			Trys to find the most similar codeword across 2-5 words
+		"""
+
+		remaining_words = currentGame.wordCount(self.team)
+
+		if (self.team == BLUE):
+			results = []
+			if remaining_words == 3:
+				results = self.model.most_similar_cosmul(
+					positive = currentGame.blueWords,
+					negative = [currentGame.assassinWord]
+				)
+				results = list(map(lambda x: (x, remaining_words), results))
+			elif remaining_words < 3:
+				for i in range(0, remaining_words - 1):
+					results += self.model.most_similar(
+						positive = [currentGame.blueWords[i]],
+						negative = [currentGame.assassinWord]
+						)
+				results = list(map(lambda x: (x, 1), results))
+			else: 
+				for i in range(0, remaining_words - 2):
+					for j in range(i+1, remaining_words - 1):
+						for k in range(j+1, remaining_words):
+						
+							results += self.model.most_similar_cosmul(
+								positive = [
+								currentGame.blueWords[i],
+								currentGame.blueWords[j],
+								currentGame.blueWords[k]
+								],
+								negative = [currentGame.assassinWord]
+								)
+
+				results = list(map(lambda x: (x, 3), results))
+
+
+		else:
+			results = []
+			if remaining_words < 4:
+				results = self.model.most_similar_cosmul(
+					positive = currentGame.redWords,
+					negative = [currentGame.assassinWord]
+				)
+				results = list(map(lambda x: (x, remaining_words), results))
+			elif remaining_words < 3:
+				for i in range(0, remaining_words - 1):
+					results += self.model.most_similar(
+						positive = [currentGame.redWords[i]],
+						negative = [currentGame.assassinWord]
+						)
+				results = list(map(lambda x: (x, 1), results))
+			else: 
+				for i in range(0, remaining_words - 2):
+					for j in range(i+1, remaining_words - 1):
+						for k in range(j+1, remaining_words):
+						
+							results += self.model.most_similar_cosmul(
+								positive = [
+								currentGame.redWords[i],
+								currentGame.redWords[j],
+								currentGame.redWords[k]
+								],
+								negative = [currentGame.assassinWord]
+								)
+
+				results = list(map(lambda x: (x, 3), results))
+
 		results.sort(key=lambda x:x[1], reverse=True)
-		#print(currentGame.blueWords)
-		#print(results)
+		# print(currentGame.redWords)
+		# print(results)
+		for word in results:
+			if word[0][0] not in self.old_clues and self.valid_clue(currentGame.wordgrid, word[0][0]):
+				self.old_clues += word[0]
+				return (word[0][0], word[1])
+
+
+
+		return('pass', 1)
+
+class Strategic_Gen_v6(Gen):
+
+	def __init__(self, team):
+
+		super().__init__(team)
+		self.model = gensim.models.KeyedVectors.load_word2vec_format(
+			'components/models/GoogleNews-vectors-negative300.bin', 
+			binary=True, 
+			limit=100000
+			)
+		self.old_clues = []
+
+	def give_clue(self, currentGame):
+		"""
+			Trys to find the most similar codeword across 2-5 words
+		"""
+
+		remaining_words = currentGame.wordCount(self.team)
+
+		if (self.team == BLUE):
+			results = []
+			if remaining_words == 3:
+				results = self.model.most_similar_cosmul(
+					positive = currentGame.blueWords,
+					negative = [currentGame.assassinWord]
+				)
+				results = list(map(lambda x: (x, remaining_words), results))
+			elif remaining_words < 3:
+				results = self.model.most_similar(
+					positive = currentGame.blueWords,
+					negative = [currentGame.assassinWord]
+				)
+				results = list(map(lambda x: (x, remaining_words), results))
+			else: 
+				for i in range(0, remaining_words - 2):
+					for j in range(i+1, remaining_words - 1):
+						for k in range(j+1, remaining_words):
+						
+							results += self.model.most_similar_cosmul(
+								positive = [
+								currentGame.blueWords[i],
+								currentGame.blueWords[j],
+								currentGame.blueWords[k]
+								],
+								negative = [currentGame.assassinWord]
+								)
+
+				results = list(map(lambda x: (x, 3), results))
+
+
+		else:
+			results = []
+			if remaining_words == 3:
+				results = self.model.most_similar_cosmul(
+					positive = currentGame.redWords,
+					negative = [currentGame.assassinWord]
+				)
+				results = list(map(lambda x: (x, remaining_words), results))
+			elif remaining_words < 3:
+				results = self.model.most_similar(
+					positive = currentGame.redWords,
+					negative = [currentGame.assassinWord]
+				)
+				results = list(map(lambda x: (x, remaining_words), results))
+			else: 
+				for i in range(0, remaining_words - 2):
+					for j in range(i+1, remaining_words - 1):
+						for k in range(j+1, remaining_words):
+						
+							results += self.model.most_similar_cosmul(
+								positive = [
+								currentGame.redWords[i],
+								currentGame.redWords[j],
+								currentGame.redWords[k]
+								],
+								negative = [currentGame.assassinWord]
+								)
+
+				results = list(map(lambda x: (x, 3), results))
+
+		results.sort(key=lambda x:x[0][1], reverse=True)
+		# print(currentGame.redWords)
+		# print(results)
 		for word in results:
 			if word[0][0] not in self.old_clues and self.valid_clue(currentGame.wordgrid, word[0][0]):
 				self.old_clues += word[0]
