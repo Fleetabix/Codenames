@@ -57,7 +57,7 @@ class gameboard:
 			Takes a word and determines whether it still exists on the playing board
 		"""
 
-		if word == "" and not word in self.wordgrid :
+		if word == "" or not word in self.wordgrid :
 			return False
 		else:
 			return True
