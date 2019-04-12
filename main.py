@@ -2,6 +2,7 @@
 from components.gameboard import gameboard
 from components.generator import *
 from components.guesser import *
+from components.statistics import game_stats
 
 import random
 import os
@@ -13,6 +14,9 @@ RED = 1
 BLUE = 2
 ASSASSIN = 3
 CIV = 4
+
+stat_collector = game_stats()
+
 
 class Players:
 
@@ -31,30 +35,30 @@ def main():
 	print(sys.argv[1]) 	
 	if sys.argv[1] == '1':
 		players = Players(
-		Human_Guess(),
-		Human_Guess(),
-		Human_Gen(RED),
-		Human_Gen(BLUE)
+			Human_Guess(),
+			Human_Guess(),
+			Human_Gen(RED),
+			Human_Gen(BLUE)
 		)
 	elif sys.argv[1] == '2':
 		players = Players(
-		Human_Guess(),
-		Human_Guess(),
-		Human_Gen(RED),
-		Automated_Gen(BLUE)
+			Human_Guess(),
+			Human_Guess(),
+			Human_Gen(RED),
+			Automated_Gen(BLUE)
 		)
 	elif sys.argv[1] == '3':
 		players= Players(
-		Human_Guess(),
-		Human_Guess(),
-		Strategic_Gen(RED),
-		Human_Gen(BLUE)
+			Human_Guess(),
+			Human_Guess(),
+			Strategic_Gen_v6(RED),
+			Human_Gen(BLUE)
 		)
 	elif sys.argv[1] == '4':
 		players = Players(
 			News_Guess(),
 			Random_Guess(),
-			Automated_Gen(RED),
+			Strategic_Gen_v4(RED),
 			Chaos_Gen(BLUE)
 			)
 	elif sys.argv[1] == '5':
@@ -64,15 +68,67 @@ def main():
 			Automated_Gen(RED),
 			Wiki_Gen(BLUE)
 			)
-		
-	rounds = 1
+	elif sys.argv[1] == '6':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Automated_Gen(RED),
+			Strategic_Gen_v2(BLUE)
+			)
+	elif sys.argv[1] == '7':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Automated_Gen(RED),
+			Strategic_Gen_v3(BLUE)
+			)
+	elif sys.argv[1] == '8':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Automated_Gen(RED),
+			Automated_Gen_v2(BLUE)
+			)
+	elif sys.argv[1] == '9':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Automated_Gen(RED),
+			Strategic_Gen_v4(BLUE)
+			)
+	elif sys.argv[1] == '10':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Automated_Gen_v2(RED),
+			Strategic_Gen_v4(BLUE)
+			)
+	elif sys.argv[1] == '11':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Strategic_Gen_v4(RED),
+			Strategic_Gen_v5(BLUE)
+			)
+	elif sys.argv[1] == '12':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Strategic_Gen_v4(RED),
+			Strategic_Gen_v6(BLUE)
+			)
+	elif sys.argv[1] == '13':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Automated_Gen_v2(RED),
+			Strategic_Gen_v6(BLUE)
+			)
 	try: 
 		rounds = int(sys.argv[2])
 	except Exception as e:
-		pass
+		rounds = 1
 
-	red_wins = 0
-	blue_wins = 0
 
 	if random.random() > 0.5 :
 		start_team = BLUE
@@ -81,15 +137,13 @@ def main():
 
 	for x in range(0, rounds):
 		
-		if playGame(players, start_team) == RED :
-			red_wins += 1
-		else:
-			blue_wins += 1
-
+		playGame(players, start_team)
+			
 		start_team = switchTeam(start_team)
 
-	print('Rounds played: {}\nRed wins: {}\nBlue wins: {}'.format(rounds, red_wins, blue_wins))
+	print(stat_collector.summary_stats())
 
+	stat_collector.export_stats()
 
 
 def playGame(players, active_team):
@@ -102,16 +156,25 @@ def playGame(players, active_team):
 	wordgrid = createWord(wordfile)
 	newGame = gameboard(wordgrid)
 	#os.system('clear')
+
+	stat_collector.new_game(active_team)
+
 	while True:
-		if active_team == RED:
+
+		stat_collector.new_round()
+		
+		#This was wrong way round 11/4
+		if active_team == BLUE:
 			
 			print('Blue team goes!')
 			takeTurn(BLUE, players, newGame)
 			checkWinner = newGame.checkWinner(BLUE)
 			if checkWinner ==  BLUE:
+				stat_collector.end_game(BLUE, True)
 				print('Blue team wins!')
 				return BLUE
 			elif checkWinner == RED:
+				stat_collector.end_game(RED, False)
 				print('Red team wins!')
 				return RED
 
@@ -121,9 +184,11 @@ def playGame(players, active_team):
 			takeTurn(RED, players, newGame)
 			checkWinner = newGame.checkWinner(RED)
 			if checkWinner ==  BLUE:
+				stat_collector.end_game(BLUE, False)
 				print('Blue team wins!')
 				return BLUE
 			elif checkWinner == RED:
+				stat_collector.end_game(RED, True)
 				print('Red team wins!')
 				return RED
 
@@ -157,15 +222,15 @@ def takeTurn(team, players, currentGame):
 		Allow a given team to take their turn
 	"""
 	
-	
-
-	
 	print(currentGame.remainingWords())
 	
 	if team == RED:
 		clue = players.red_gen.give_clue(currentGame)
 	else:
 		clue = players.blue_gen.give_clue(currentGame)
+
+	if clue == None:
+		return
 
 	os.system('clear')
 
@@ -188,6 +253,7 @@ def takeTurn(team, players, currentGame):
 		if outcome == team:
 			print("Correct guess")
 		elif outcome == ASSASSIN:
+			stat_collector.assassin_detected()
 			print("Assasin found!")
 			break
 		elif outcome == CIV:

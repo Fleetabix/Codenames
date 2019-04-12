@@ -48,7 +48,9 @@ class Random_Guess(guesser):
 		"""
 			Randomly return a word from the wordgrid
 		"""
-		return random.choice(currentGame.wordgrid)
+		words_only = list(filter(lambda x: x!="", currentGame.wordgrid))
+
+		return random.choice(words_only)
 
 
 
@@ -72,11 +74,18 @@ class News_Guess(guesser):
 		matches = []
 
 		for word in currentGame.wordgrid:
+			if word == "":
+				continue
 			matches.append((word, self.model.distance(guessword, word)))
 
 		matches.sort(key=lambda x:x[1])
-
-		return matches[0][0]
+		try:
+			return matches[0][0]
+			
+		except Exception as e:
+			print(matches)
+			print(currentGame.wordgrid)
+			raise e
 
 class Wiki_Guess(guesser):
 	"""
@@ -98,6 +107,8 @@ class Wiki_Guess(guesser):
 		matches = []
 
 		for word in currentGame.wordgrid:
+			if word == "":
+				continue
 			matches.append((word, self.model.distance(guessword, word)))
 
 		matches.sort(key=lambda x:x[1])
