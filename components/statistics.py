@@ -1,5 +1,6 @@
 import csv
 import datetime
+import math
 
 ERROR = -1
 RED = 1
@@ -41,7 +42,7 @@ class game_stats():
 	def end_game(self, winner, true_win):
 
 		self.game_summary[-1].update({
-			'rounds' : self.round_counter,
+			'rounds' : math.ceil(self.round_counter / 2),
 			'winner' : winner,
 			'true_win' : true_win
 		})
