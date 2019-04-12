@@ -51,7 +51,7 @@ def main():
 		players= Players(
 			Human_Guess(),
 			Human_Guess(),
-			Strategic_Gen(RED),
+			Strategic_Gen_v6(RED),
 			Human_Gen(BLUE)
 		)
 	elif sys.argv[1] == '4':
@@ -115,6 +115,13 @@ def main():
 			News_Guess(),
 			News_Guess(),
 			Strategic_Gen_v4(RED),
+			Strategic_Gen_v6(BLUE)
+			)
+	elif sys.argv[1] == '13':
+		players = Players(
+			News_Guess(),
+			News_Guess(),
+			Automated_Gen_v2(RED),
 			Strategic_Gen_v6(BLUE)
 			)
 	try: 
