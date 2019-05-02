@@ -57,7 +57,7 @@ class Human_Gen(Gen):
 		"""
 			Returns the codeword and a number of words to guess
 		"""
-		input('\nPass to guesser\n')
+		input('\nPass to spymaster\n')
 
 		print(currentGame.currentBoard())
 		
